@@ -53,16 +53,18 @@ public class BannerAnimePagerAdapter extends PagerAdapter {
         Glide.with(context).load(headerAnimesList.get(position).getImageUrl()).into(bannerImage);
         container.addView(view);
 
-//        bannerImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(context, AnimeDetails.class);
-//                intent.putExtra("",);
-//                intent.putExtra("",);
-//                intent.putExtra("",);
-//                intent.putExtra("",);
-//            }
-//        });
+        bannerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AnimeDetails.class);
+                intent.putExtra("animeId",headerAnimesList.get(position).getId());
+                intent.putExtra("animeName",headerAnimesList.get(position).getAnimeName());
+                intent.putExtra("animeImageUrl",headerAnimesList.get(position).getImageUrl());
+                intent.putExtra("animeFile",headerAnimesList.get(position).getFileUrl());
+                context.startActivity(intent);
+
+            }
+        });
         return view;
     }
 }

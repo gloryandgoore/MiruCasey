@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         headerAnimesList = new ArrayList<>();
-        headerAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "" ));
-        headerAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
+        headerAnimesList.add(new HeaderAnimes(1, "Naruto", "https://m.media-amazon.com/images/S/pv-target-images/45fa87b65b1f9f0e66a23111f778ba198710f3520fc8f9ecde24885b3eca5218._UR1920,1080_UX400_UY225_.jpg", "" ));
+        headerAnimesList.add(new HeaderAnimes(2, "One Piece", "https://m.media-amazon.com/images/S/pv-target-images/c02450f675aef50667e49705d74483e68dea0deb74333ed644b794edd45214eb._UR1920,1080_UX400_UY225_.jpg", "" ));
 
 
         awardWinningAnimesList = new ArrayList<>();
