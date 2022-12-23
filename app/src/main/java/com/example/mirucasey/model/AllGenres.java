@@ -9,8 +9,8 @@ public class AllGenres {
     private List<GenreItem> genreItemList = null;
 
     public AllGenres(Integer genreId, String genreTitle, List<GenreItem> genreItemList) {
-        this.genreTitle = genreTitle;
         this.genreId = genreId;
+        this.genreTitle = genreTitle;
         this.genreItemList = genreItemList;
     }
 

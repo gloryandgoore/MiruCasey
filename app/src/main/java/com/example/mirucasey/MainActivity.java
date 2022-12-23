@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         indicatorTab.setupWithViewPager(bannerAnimeViewPager);
 
         Timer slideTimer = new Timer();
-        slideTimer.scheduleAtFixedRate(new AutoSlider(), 6000, 9000);
+        slideTimer.scheduleAtFixedRate(new AutoSlider(), 4000, 6000);
         indicatorTab.setupWithViewPager(bannerAnimeViewPager, true);
     }
 

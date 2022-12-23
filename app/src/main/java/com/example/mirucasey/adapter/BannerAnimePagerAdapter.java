@@ -41,34 +41,14 @@ public class BannerAnimePagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.banner_anime_layout, null);
         ImageView bannerImage = view.findViewById(R.id.banner_image);
-
-        Glide.with(context).load(headerAnimesList.get(0).getImageUrl()).into(bannerImage);
-        return bannerImage;
+        Glide.with(context).load(headerAnimesList.get(position).getImageUrl()).into(bannerImage);
+        container.addView(view);
+        return view;
     }
 }
-
-//    @NonNull
-//    @NotNull
-//    @Override
-//    public Object instantiateItem(@NonNull @NotNull ViewGroup container, int position) {
-//        View v = LayoutInflater.from(context).inflate(R.layout.banner_adapter_layout, container, false);
-//        ImageView imgView = v.findViewById(R.id.imgBannerImage);
-//
-//        Glide.with(context).load(moviesList.get(0).getImageUrl()).into(imgView);
-//        return imgView;
-//    }
-//
-//    @Override
-//    public void destroyItem(@NonNull @NotNull ViewGroup container, int position, @NonNull @NotNull Object object) {
-//        container.removeView((View) object);
-//    }
-//}
-
-
