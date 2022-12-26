@@ -1,17 +1,38 @@
 package com.example.mirucasey.model;
 
+import java.util.List;
+
 public class HeaderAnimes {
 
     Integer id;
     String animeName;
     String imageUrl;
-    String fileUrl;
+    String synopsis;
+    List<Genres> animeGenre;
 
-    public HeaderAnimes(Integer id, String animeName, String imageUrl, String fileUrl) {
+
+    public HeaderAnimes(Integer id, String animeName, String imageUrl, String synopsis, List<Genres> animeGenre) {
         this.id = id;
         this.animeName = animeName;
         this.imageUrl = imageUrl;
-        this.fileUrl = fileUrl;
+        this.synopsis = synopsis;
+        this.animeGenre = animeGenre;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public List<Genres> getAnimeGenre() {
+        return animeGenre;
+    }
+
+    public void setAnimeGenre(List<Genres> animeGenre) {
+        this.animeGenre = animeGenre;
     }
 
     public Integer getId() {
@@ -38,11 +59,5 @@ public class HeaderAnimes {
         this.imageUrl = imageUrl;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
-    }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
 }

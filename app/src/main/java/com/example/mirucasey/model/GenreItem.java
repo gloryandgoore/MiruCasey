@@ -4,13 +4,13 @@ public class GenreItem {
     Integer id;
     String animeName;
     String imageUrl;
-    String fileUrl;
+    String synopsis;
 
-    public GenreItem(Integer id, String animeName, String imageUrl, String fileUrl) {
+    public GenreItem(Integer id, String animeName, String imageUrl, String synopsis) {
         this.id = id;
         this.animeName = animeName;
         this.imageUrl = imageUrl;
-        this.fileUrl = fileUrl;
+        this.synopsis = synopsis;
     }
 
     public Integer getId() {
@@ -37,11 +37,11 @@ public class GenreItem {
         this.imageUrl = imageUrl;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public String getSynopsis() {
+        return synopsis;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 }

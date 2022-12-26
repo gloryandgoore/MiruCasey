@@ -60,7 +60,7 @@ public class BannerAnimePagerAdapter extends PagerAdapter {
                 intent.putExtra("animeId",headerAnimesList.get(position).getId());
                 intent.putExtra("animeName",headerAnimesList.get(position).getAnimeName());
                 intent.putExtra("animeImageUrl",headerAnimesList.get(position).getImageUrl());
-                intent.putExtra("animeFile",headerAnimesList.get(position).getFileUrl());
+                intent.putExtra("animeFile",headerAnimesList.get(position).getSynopsis());
                 context.startActivity(intent);
 
             }

@@ -45,7 +45,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
                 intent.putExtra("animeId",genreItemList.get(position).getId());
                 intent.putExtra("animeName",genreItemList.get(position).getAnimeName());
                 intent.putExtra("animeImageUrl",genreItemList.get(position).getImageUrl());
-                intent.putExtra("animeFile",genreItemList.get(position).getFileUrl());
+                intent.putExtra("animeSynopsis",genreItemList.get(position).getSynopsis());
                 context.startActivity(intent);
             }
         });

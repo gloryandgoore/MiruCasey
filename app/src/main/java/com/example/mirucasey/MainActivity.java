@@ -13,11 +13,17 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 
 
+import com.example.mirucasey.adapter.AnimesAdapter;
 import com.example.mirucasey.adapter.BannerAnimePagerAdapter;
 import com.example.mirucasey.adapter.MainRecyclerAdapter;
 import com.example.mirucasey.model.AllGenres;
+import com.example.mirucasey.model.Anime;
 import com.example.mirucasey.model.GenreItem;
+import com.example.mirucasey.model.Genres;
 import com.example.mirucasey.model.HeaderAnimes;
+import com.example.mirucasey.model.JsonService;
+import com.example.mirucasey.service.DBManager;
+import com.example.mirucasey.service.NetworkingService;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -25,7 +31,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NetworkingService.NetworkingListener, AnimesAdapter.ItemListener, DBManager.DataBaseListener {
 
     BannerAnimePagerAdapter bannerAnimePagerAdapter;
     TabLayout indicatorTab, screenTab;
@@ -36,68 +42,78 @@ public class MainActivity extends AppCompatActivity {
     List<HeaderAnimes> dramaAnimesList;
     List<HeaderAnimes> actionAnimesList;
     MainRecyclerAdapter mainRecyclerAdapter;
+    AnimesAdapter animesAdapter;
+    RecyclerView animeRecycler;
     RecyclerView mainRecycler;
     List<AllGenres> allGenresList;
-    //ViewPager_2 headerAnimeViewPager;
-    //NestedScrollView scrollView;
-    //AppBarLayout appBarLayout;
-    //Handler handler;
-    //Runnable runnable;
+    ArrayList<Anime> list = new ArrayList<>();
+
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.anime_searchview);
+        SearchView searchView = (SearchView) searchViewItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
-             /*   if(list.contains(query)){
-                    adapter.getFilter().filter(query);
-                }else{
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }*/
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-//                adapter.getFilter().filter(newText);
+                if (newText.length() >= 3){
+                    ((MyApp) getApplication()).networkingService.getAllAnimes(newText);
+                } else {
+                    animesAdapter.list = new ArrayList<>(0);
+                    animesAdapter.notifyDataSetChanged();
+
+                }
                 return false;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((MyApp) getApplication()).networkingService.listener = this;
+        animeRecycler = findViewById(R.id.main_recycler);
+        animesAdapter = new AnimesAdapter(this, list);
+        this.setTitle("Search For Animes....");
+        animesAdapter.listener = this;
+        ((MyApp)getApplication()).dbManager.listener = this;
+        ((MyApp)getApplication()).dbManager.getAnimeDB(this);
+        animeRecycler.setAdapter(animesAdapter);
+        animeRecycler.setLayoutManager(new LinearLayoutManager(this));
 
 
 
         indicatorTab = findViewById(R.id.tab_indicator);
         screenTab = findViewById(R.id.tabLayoutTop);
 
-
-        headerAnimesList = new ArrayList<>();
-        headerAnimesList.add(new HeaderAnimes(1, "Naruto", "https://m.media-amazon.com/images/S/pv-target-images/45fa87b65b1f9f0e66a23111f778ba198710f3520fc8f9ecde24885b3eca5218._UR1920,1080_UX400_UY225_.jpg", "" ));
-        headerAnimesList.add(new HeaderAnimes(2, "One Piece", "https://m.media-amazon.com/images/S/pv-target-images/c02450f675aef50667e49705d74483e68dea0deb74333ed644b794edd45214eb._UR1920,1080_UX400_UY225_.jpg", "" ));
-
-
-        awardWinningAnimesList = new ArrayList<>();
-        awardWinningAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "" ));
-        awardWinningAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
-
-        dramaAnimesList = new ArrayList<>();
-        dramaAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "" ));
-        dramaAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
-
-        actionAnimesList = new ArrayList<>();
-        actionAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "" ));
-        actionAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
+//
+//        headerAnimesList = new ArrayList<>();
+//        headerAnimesList.add(new HeaderAnimes(1, "Naruto", "https://m.media-amazon.com/images/S/pv-target-images/45fa87b65b1f9f0e66a23111f778ba198710f3520fc8f9ecde24885b3eca5218._UR1920,1080_UX400_UY225_.jpg", "", "ACTION"));
+//        headerAnimesList.add(new HeaderAnimes(2, "One Piece", "https://m.media-amazon.com/images/S/pv-target-images/c02450f675aef50667e49705d74483e68dea0deb74333ed644b794edd45214eb._UR1920,1080_UX400_UY225_.jpg", "",  ("ACTION", "AWARD WINNING") ));
+//
+//
+//        awardWinningAnimesList = new ArrayList<>();
+//        awardWinningAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "", animeGenre.add(new Genres("ACTION"));
+//  ));
+//        awardWinningAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
+//
+//        dramaAnimesList = new ArrayList<>();
+//        dramaAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "" ));
+//        dramaAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
+//
+//        actionAnimesList = new ArrayList<>();
+//        actionAnimesList.add(new HeaderAnimes(1, "Naruto", "https://cdn.myanimelist.net/images/anime/1493/116732.jpg", "" ));
+//        actionAnimesList.add(new HeaderAnimes(2, "One Piece", "https://cdn.myanimelist.net/images/anime/1939/97699.jpg", "" ));
 
         setBannerAnimePagerAdapter(headerAnimesList);
 
@@ -125,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+
 
             }
 
@@ -159,6 +176,32 @@ public class MainActivity extends AppCompatActivity {
         slideTimer.scheduleAtFixedRate(new AutoSlider(), 4000, 6000);
         indicatorTab.setupWithViewPager(bannerAnimeViewPager, true);
     }
+
+    @Override
+    public void gettingJsonIsCompleted(String json) {
+        // json is a string ==> Json Array of Strings
+        // for Recycler view I need ArrayList <City>
+        list = JsonService.fromJSONToList(json);
+        animesAdapter.list = list;
+        animesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void gettingAnimeCompleted(Anime[] list) {
+
+    }
+
+    @Override
+    public void onClicked(int post) {
+
+    }
+
+    @Override
+    public void insertingAnimeCompleted() {
+
+    }
+
+
 
     class AutoSlider extends TimerTask{
 
